@@ -11,7 +11,7 @@ GAME RULES:
 
 var scores, roundScore, activePlayer, dice;
 
-scores = [0, 0];
+score = [0, 0];
 roundScore = 0;
 activePlayer = 0;
 
@@ -28,4 +28,39 @@ document.querySelector(".btn-roll").addEventListener("click", function () {
   dice = Math.floor(Math.random() * 6) + 1;
   document.querySelector(".dice").style.display = "block";
   document.querySelector(".dice").src = "dice-" + dice + ".png";
+
+  document.getElementById("current-" + activePlayer).textContent = dice;
+
+  if (dice != 1) {
+    roundScore += dice;
+    document.getElementById("score-" + activePlayer).textContent = roundScore;
+    score[activePlayer] = roundScore;
+  } else {
+    // roundScore = 0;
+    nextPlayer();
+  }
+
+  // document.querySelector(".dice").style.display = "none";
 });
+
+document.querySelector(".btn-hold").addEventListener("click", function () {
+  if (score[activePlayer] >= 20) {
+    document.getElementById("name-" + activePlayer).textContent = "Winner!";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+    document.querySelector(".dice").style.display = "none";
+  } else {
+    nextPlayer();
+  }
+});
+
+function nextPlayer() {
+  activePlayer = activePlayer === 0 ? 1 : 0;
+
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+}
